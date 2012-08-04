@@ -1,0 +1,3 @@
+package @@PLUGIN_ID@@::Tags;
+use strict;
+
