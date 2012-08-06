@@ -53,29 +53,40 @@ close FILE;
 # }
 # print '<h2>===== mt-config.cgi の値 =====</h2>';
 
-# !mt-plug.in の設定
+############################################################
+# 設定ここから
+############################################################
 # !$conf
 my $conf = {
-    author_name    => "Tomohiro Okuwaki",
+    author_name    => "Tomohiro Okuwaki", # 必須（日本語も可）
     author_link    => "",
-    name           => "A My First Plugin",
-    id             => "A_MyFirstPlugin",
-    version        => "0.01",
+    name           => "A My First Plugin", # 必須（半角英数、スペース、ハイフン、アンダーバー）
+    id             => "A_MyFirstPlugin", # 必須（半角英数、アンダーバー）
+    version        => "0.01", # 必須
     schema_version => "0.01",
-    description    => "初めてのプラグイン",
+    description    => "初めてのプラグイン", # 推奨
     plugin_link    => "",
     doc_link       => "",
 
-    # !config_settings : 環境変数
+    # !config_settings : 環境変数（mt-config.cgi で設定する環境変数です）
     config_settings => {
+        # 環境変数名 => "初期値",
         UseMTAppjQuery => "1",
-        AllowFileInclude => "0"
+        AllowFileInclude => "0",
     },
 
-    # !object_types : フィールドの拡張、独自オブジェクトの追加
+    # !object_types : フィールドの拡張、独自オブジェクトの追加（現在は mt_entry の拡張のみ対応）
     object_types => {
         # mt_entryテーブルの拡張
         entry => {
+            # カラム名 => { # 半角英数、アンダーバー
+            #     type => '右のどれか', # 必須（integer,smallint,float,string,text,boolean,datetime,timestamp,blob のいずれか）
+            #     size => 数字, # type が string の場合のみ 1~255
+            #     label => '文字列', # 管理画面に表示されるラベル名
+            #     not_null: 1, # null を許可しない場合は 1
+            #     auto_increment: 1 # 自動で 1 を加算する場合は 1
+            #     revisioned: 1 # リビジョン管理する場合は 1
+            # },
             free_str => {
                 type => "string", # integer, smallint, float, string, text, boolean, datetime, timestamp, blob
                 size => 32, # stringの場合のみ1~255
@@ -101,8 +112,12 @@ my $conf = {
         }
     },
 
-    # !settings : プラグインごとに持つ固有の設定値
+    # !settings : プラグインごとに持つ固有の設定値（プラグインの設定画面で設定できるやつ）
     settings => {
+        # 設定名 => { # 半角英数、アンダーバー
+        #     default => '初期値', # 文字列か数字
+        #     scope => '右のどちらか' # system（システムで利用する場合）, blog（ウェブサイトまたはブログので利用する場合）
+        # },
         my_first_plugis_setting_1 => {
             default => "デフォルト",
             scope => "blog"
@@ -123,22 +138,24 @@ my $conf = {
 
     # !tags : 拡張テンプレートタグ
     tags => {
+        # テンプレートの種類 => ['テンプレートタグ名'], # テンプレートタグが複数ある場合はカンマ区切り。
         block    => ['MyBlock'],
+        # テンプレートタブ名に「:」で区切って、プラグインの設定名を入れると、その値を取り出せるファンクションタグになる。
         function => ['MyFunc1:my_first_plugis_setting_1','MyFunc2:my_system_setting_1','MyFunc3'],
         modifier => ['sample']
     },
 
-    # !static_files : mt-static/plugins にデータを置くか
+    # !static_files : mt-static/plugins にデータを置く場合は、以下のように書くとディレクトリが作成される（複数ある場合はカンマ区切り）。
     static_files => ['js','css','img'],
 
-    # l10n : 翻訳
+    # l10n : 翻訳（開発中）
 #     l10n => {
 #         Tomohiro_Okuwaki => "奥脇 知宏",    
 #     },
-
-    # Path
-#     plugin_files => "plugin_files",不要
 };
+############################################################
+# 設定ここまで
+############################################################
 
 # !必須項目の存在チェック
 $conf->{id} =~ s/\W//g;
