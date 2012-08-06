@@ -479,7 +479,7 @@ EOS
                 $use_setting = $2;
                 $tagname =~ s/^([^:]+):([^:]+)$/$1/;
                 $use_setting_scope = $conf->{settings}->{$use_setting}->{scope};
-                $use_setting_scope = ($use_setting_scope eq 'blog') ? q('blog:'.\$blog_id) : q('system');
+                $use_setting_scope = ($use_setting_scope eq 'blog') ? q('blog:'.$blog_id) : q('system');
             }
             my $lc_tagname = lc($tagname);
     
