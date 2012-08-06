@@ -10,8 +10,7 @@ use File::Copy 'copy';
 use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 use Data::Dumper;
 
-print "Content-type: text/html\n\n";
-print '<pre style="font-size:1.2em;">';
+print_message('start');
 # my $header = <<'EOD';
 # <!DOCTYPE HTML>
 # <html lang="ja-JP">
@@ -685,45 +684,8 @@ if ($use_zip) {
     }
 }
 
-# my $zip_plugins_dir = File::Spec->catdir($plug_in_zip_crt, 'plugins');
-# my $zip_static_dir = File::Spec->catdir($plug_in_zip_crt, 'mt-static');
-# my $zip_plugins_name = File::Spec->catfile($zip_plugins_dir, 'plugin.zip');
-# my $zip_static_name = File::Spec->catfile($zip_static_dir, 'static.zip');
-# mkpath($zip_plugins_dir);
-# mkpath($zip_static_dir);
-# 
-# my $zip = Archive::Zip->new();
-# $zip->addTree($zip_plugins_dir, $dir{p_root});
-# if ($zip->writeToFileNamed($zip_plugins_name) == AZ_OK) {
-#     print "Zipfile is successfully saved.\n";
-# } else {
-#     error("Zipfile save error: $!\n");
-# }
-
-# chdir($plug_in_zip);
-# my $unko1 = File::Spec->catfile('unko', 'unko1.txt');
-# my $unko2 = File::Spec->catfile('unko', 'unko2.txt');
-# my $kusai = File::Spec->catfile('unko', 'kusai', 'kusai.txt');
-# my $out = File::Spec->catfile('out.zip');
-# 
-# my $zip = Archive::Zip->new();
-# $zip->addFile($unko1);
-# $zip->addFile($unko2);
-# $zip->addFile($kusai);
-# 
-# if ($zip->writeToFileNamed($out) == AZ_OK) {
-#     print "Zipfile is successfully saved.\n";
-# } else {
-#     error("Zipfile save error: $!\n");
-# }
-# 
-# exit;
-
-# $zipfile = "{$_plugin_root_dir_name}.zip";
-# $command = "zip -r {$zipfile} ./{$_plugin_root_dir_name}/";
-# exec($command);
-
-
+print_message('end');
+exit();
 
 # !subroutines
 sub create_file {
@@ -789,14 +751,20 @@ sub format_W {
     return $text;
 }
 
+sub print_message {
+    my $type = shift;
+    if ($type eq 'start') {
+        print "Content-type: text/html\n\n";
+        print '<pre style="font-size:1.2em;">';
+    } elsif ($type eq 'end') {
+        print '<h2>プラグインが作成されました。</h2>';
+    }
+}
 sub error {
     my ($text) = shift;
     print qq(<span style="color:red;">Error: $text</span>);
     exit();
 }
-
-print '<h2>プラグインのひな形が作成されました。</h2>';
-exit();
 
 =POD
 
