@@ -1,3 +1,0 @@
-package @@PLUGIN_ID@@::CMS;
-use strict;
-
